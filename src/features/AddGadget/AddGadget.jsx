@@ -20,7 +20,7 @@ const AddGadget = () => {
     }
         
     return (
-        <div className='border-r-2 max-w-xl p-4 mx-auto w-full py-10'>
+        <div className='border-r-2 shadow-2xl rounded-md border-r-gray-200 max-w-xl p-4 mx-auto w-full py-10'>
             <form onSubmit={handleFormSubmit}>
                 <h2 className='text-3xl font-semibold text-center'>Add Gadget</h2>
                 <div className='my-4'>
