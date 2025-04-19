@@ -22,6 +22,12 @@ export const addGadget = createAsyncThunk("/gadget/addGadget",
     }
 );
 
+export const updateGadget = createAsyncThunk("/gadget/updateGadget",
+    async ({id, gadget}) => {
+        const res = await axios.put(`${BASE_URL}/${id}`, gadget);
+        return res.data;
+    });
+
 export const deleteGadget = createAsyncThunk("/gadget/deleteGadget",
     async (id) => {
         // eslint-disable-next-line no-unused-vars
@@ -57,6 +63,12 @@ const gadgetSlice = createSlice({
             .addCase(deleteGadget.fulfilled, (state, action) => {
                 state.gadgets = state.gadgets.filter((gadget) => gadget.id !== action.payload);
             })
+            .addCase(updateGadget.fulfilled, (state, action) => {
+                const index = state.gadgets.findIndex((gadget) => gadget.id === action.payload.id);
+                if (index !== -1) {
+                    state.gadgets[index] = action.payload; // Update the gadget in the array
+                }
+            });
     },
 });
 

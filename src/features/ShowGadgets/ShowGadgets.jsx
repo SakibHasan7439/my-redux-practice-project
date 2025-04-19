@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteGadget, fetchGadgetData } from "../gadgetSlice";
+import { deleteGadget, fetchGadgetData, updateGadget } from "../gadgetSlice";
 import Swal from "sweetalert2";
 
 const ShowGadgets = () => {
@@ -31,6 +31,20 @@ const ShowGadgets = () => {
       }
     });
   };
+
+  const handleFormUpdateSubmit = (event, id) => {
+    // const form = document.getElementById(id);
+    event.preventDefault();
+    const form = event.target;
+    const name = form.name.value;
+    const brand = form.brand.value;
+    const description = form.description.value;
+    const price = form.price.value;
+    const image = form.image.value;
+    const gadget = { name, brand, description, price, image };
+    dispatch(updateGadget({id, gadget}));
+    document.getElementById(id).close(); // Close the modal after submission
+  }
 
   error && <p>{error.message}</p>;
   isLoading && <p className="text-4xl text-center h-screen">loading...</p>;
@@ -64,7 +78,7 @@ const ShowGadgets = () => {
                 Delete
               </button>
               <button
-                onClick={() => document.getElementById(gadget?.id).showModal()}
+                onClick={()=> document.getElementById(gadget?.id).showModal()}
                 className="border-2 cursor-pointer rounded-md shadow-md px-2 py-1"
               >
                 Update
@@ -75,11 +89,78 @@ const ShowGadgets = () => {
               className="modal modal-bottom sm:modal-middle"
             >
               <div className="modal-box">
-                <h3 className="font-bold text-lg">Hello!</h3>
-                <p>{gadget?.id}</p>
-                <p className="py-4">
-                  Press ESC key or click the button below to close
-                </p>
+                <form onSubmit={(event)=>handleFormUpdateSubmit(event, gadget?.id)}>
+                  <div className="my-4">
+                    <label htmlFor="name" className="block mb-2">
+                      name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter gadget name"
+                      name="name"
+                      defaultValue={gadget?.name}
+                      className="w-full border rounded-md p-2"
+                    />
+                  </div>
+                  <div className="my-4">
+                    <label htmlFor="brand" className="block mb-2">
+                      brand name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter gadget brand"
+                      name="brand"
+                      defaultValue={gadget?.brand}
+                      className="w-full border rounded-md p-2"
+                    />
+                  </div>
+                  <div className="my-4">
+                    <label htmlFor="description" className="block mb-2">
+                      Description
+                    </label>
+                    <textarea
+                      name="description"
+                      placeholder="Enter gadget description"
+                      id="description"
+                      defaultValue={gadget?.description}
+                      cols="30"
+                      rows="5"
+                      className="w-full border rounded-md p-2"
+                    ></textarea>
+                  </div>
+                  <div className="my-4">
+                    <label htmlFor="price" className="block mb-2">
+                      Price
+                    </label>
+                    <input
+                      type="number"
+                      defaultValue={gadget?.price}
+                      placeholder="Enter gadget price"
+                      name="price"
+                      id="price"
+                      className="w-full border rounded-md p-2"
+                    />
+                  </div>
+                  <div className="my-4">
+                    <label htmlFor="image" className="block mb-2">
+                      Image URL
+                    </label>
+                    <input
+                      type="url"
+                      defaultValue={gadget?.image}
+                      placeholder="Enter gadget image"
+                      name="image"
+                      id="image"
+                      className="w-full border rounded-md p-2"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="bg-slate-800 text-white px-4 py-2 rounded-md font-semibold cursor-pointer"
+                  >
+                    Update
+                  </button>
+                </form>
                 <div className="modal-action">
                   <form method="dialog">
                     {/* if there is a button in form, it will close the modal */}
